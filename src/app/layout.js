@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import 'simplebar-react/dist/simplebar.min.css';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,7 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-950`}
       >
         {children}
       </body>

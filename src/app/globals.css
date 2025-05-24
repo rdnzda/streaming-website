@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@import 'simplebar-react/dist/simplebar.min.css';
 
 :root {
-  --background: #ffffff;
+  --background: var(--color-gray-950);
   --foreground: #171717;
 }
 
@@ -14,7 +15,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: var(--color-gray-950);
     --foreground: #ededed;
   }
 }
@@ -23,4 +24,42 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.simplebar-scrollbar::before {
+  background-color: rgb(202, 240, 247); /* couleur de la poignée */
+}
+
+.simplebar-track.simplebar-horizontal {
+  height: 12px; /* hauteur de la scrollbar horizontale */
+}
+
+.simplebar-track.simplebar-vertical {
+  width: 3px; /* largeur de la scrollbar verticale */
+}
+
+.simplebar-scrollbar {
+  border-radius: 4px; /* coins arrondis */
+}
+
+/* Scrollbar globale */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(202, 240, 247); /* Change ici la couleur pour correspondre à ton thème */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(209, 224, 227) transparent;
 }
