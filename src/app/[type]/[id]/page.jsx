@@ -251,9 +251,10 @@ export default function MediaDetailsPage() {
         {/* Contenu principal */}
         <div className="relative -mt-16 sm:-mt-20 z-10 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
+            {/* Info film */}
+            <div className="flex flex-row gap-3 sm:gap-6 md:gap-8">
               {/* Poster */}
-              <div className="flex-shrink-0 flex justify-center lg:justify-start">
+              <div className="flex-shrink-0">
                 <img
                   src={
                     media.poster_path
@@ -261,131 +262,153 @@ export default function MediaDetailsPage() {
                       : 'https://placehold.co/300x450@2x.png'
                   }
                   alt={title}
-                  className="w-48 sm:w-60 lg:w-72 h-auto rounded-lg shadow-2xl"
+                  className="w-42 xs:w-42 sm:w-78 md:w-60 lg:w-72 h-auto rounded-lg shadow-2xl"
                 />
               </div>
-
               {/* Informations */}
-              <div className="flex-1 space-y-4 sm:space-y-6 text-center lg:text-left">
+              <div className="flex-1 space-y-2 xs:space-y-3 sm:space-y-4 md:space-y-6 min-w-0">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2">{title}</h1>
+                  <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-1 sm:mb-2 leading-tight">{title}</h1>
                   {media.tagline && (
-                    <p className="text-base sm:text-lg lg:text-xl text-gray-300 italic">{media.tagline}</p>
+                    <p className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 italic leading-snug">{media.tagline}</p>
                   )}
                 </div>
 
                 {/* Note et informations rapides */}
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
-                  <div className="flex items-center gap-2">
-                    <FaStar className="text-yellow-500" />
+                <div className="flex flex-wrap items-center gap-2 xs:gap-3 sm:gap-4 md:gap-6 text-xs xs:text-sm sm:text-base md:text-lg">
+                  <div className="flex items-center gap-1 xs:gap-2">
+                    <FaStar className="text-yellow-500 text-xs xs:text-sm" />
                     <span className="font-semibold">{formatNote(media.vote_average)}</span>
-                    <span className="text-gray-400 hidden sm:inline">({media.vote_count} {t.details.votes})</span>
+                    <span className="text-gray-400 hidden sm:inline text-xs sm:text-sm">({media.vote_count} {t.details.votes})</span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-blue-400" />
-                    <span className="text-sm sm:text-base">{formatDate(releaseDate)}</span>
+                  <div className="flex items-center gap-1 xs:gap-2">
+                    <FaCalendarAlt className="text-blue-400 text-xs xs:text-sm" />
+                    <span className="text-xs xs:text-sm sm:text-base">{formatDate(releaseDate)}</span>
                   </div>
 
                   {isMovie && media.runtime && (
-                    <div className="flex items-center gap-2">
-                      <FaClock className="text-green-400" />
-                      <span className="text-sm sm:text-base">{formatRuntime(media.runtime)}</span>
+                    <div className="flex items-center gap-1 xs:gap-2">
+                      <FaClock className="text-green-400 text-xs xs:text-sm" />
+                      <span className="text-xs xs:text-sm sm:text-base">{formatRuntime(media.runtime)}</span>
                     </div>
                   )}
 
                   {!isMovie && media.number_of_seasons && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-purple-400 font-semibold text-sm sm:text-base">
+                    <div className="flex items-center gap-1 xs:gap-2">
+                      <span className="text-purple-400 font-semibold text-xs xs:text-sm sm:text-base">
                         {media.number_of_seasons} {t.details.seasons}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Genres */}
-                {media.genres && media.genres.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {media.genres.map((genre) => (
-                      <span
-                        key={genre.id}
-                        className="bg-gray-700 px-3 py-1 rounded-full text-sm"
-                      >
-                        {genre.name}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                {/* Genres et Pays */}
+                <div className="flex flex-wrap gap-1 xs:gap-2">
+                  {/* Genres */}
+                  {media.genres && media.genres.length > 0 && (
+                    <>
+                      {media.genres.map((genre) => (
+                        <span
+                          key={genre.id}
+                          className="bg-gray-700 px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm"
+                        >
+                          {genre.name}
+                        </span>
+                      ))}
+                    </>
+                  )}
+                  
+                  {/* Pays de production */}
+                  {media.production_countries && media.production_countries.length > 0 && (
+                    <>
+                      {media.production_countries.map((country) => (
+                        <span
+                          key={country.iso_3166_1}
+                          className="bg-blue-900/50 px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm"
+                        >
+                          {country.name}
+                        </span>
+                      ))}
+                    </>
+                  )}
+                </div>
+
+                {/* Bouton Trailer mobile - à droite du poster */}
+              {videos && videos.length > 0 && (
+                <div className="flex sm:hidden items-start pt-2">
+                  <button
+                    onClick={() => setShowTrailer(true)}
+                    className="inline-flex items-center gap-1 bg-white text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs"
+                  >
+                    <FaPlay className="text-xs" />
+                    <span>Regarder le Trailer</span>
+                  </button>
+                </div>
+              )}
 
                 {/* Synopsis */}
                 {media.overview && (
-                  <div>
-                    <h2 className="text-2xl font-bold mb-3">{t.details.synopsis}</h2>
-                    <p className="text-gray-300 leading-relaxed text-lg">{media.overview}</p>
+                  <div className="hidden sm:block">
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">{t.details.synopsis}</h2>
+                    <p className="text-gray-300 leading-relaxed text-sm sm:text-base md:text-lg text-justify line-clamp-4 md:line-clamp-none">{media.overview}</p>
                   </div>
                 )}
 
                 {/* Bouton Trailer moderne et simple */}
                 {videos && videos.length > 0 && (
-                  <div>
+                  <div className="hidden sm:block">
                     <button
                       onClick={() => setShowTrailer(true)}
-                      className="inline-flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-100 px-5 py-2.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+                      className="inline-flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-100 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-sm sm:text-base"
                     >
-                      <FaPlay className="text-sm" />
-                      <span>Regarder le Trailer</span>
+                      <FaPlay className="text-xs sm:text-sm" />
+                      <span className="hidden xs:inline">Regarder le Trailer</span>
+                      <span className="inline xs:hidden">Regarder le Trailer</span>
                     </button>
-                  </div>
-                )}
-
-                {/* Pays de production */}
-                {media.production_countries && media.production_countries.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
-                      <FaGlobe className="text-blue-400" />
-                      {t.details.countries}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {media.production_countries.map((country) => (
-                        <span
-                          key={country.iso_3166_1}
-                          className="bg-blue-900/50 px-3 py-1 rounded text-sm"
-                        >
-                          {country.name}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 )}
               </div>
             </div>
 
+            {/* Sections mobiles/tablettes (synopsis, trailer, pays) */}
+            <div className="mt-6 space-y-4 sm:space-y-6">
+              {/* Synopsis mobile */}
+              {media.overview && (
+                <div className="block sm:hidden">
+                  <h2 className="text-lg font-bold mb-2">{t.details.synopsis}</h2>
+                  <p className="text-gray-300 leading-relaxed text-sm text-justify">{media.overview}</p>
+                </div>
+              )}
+            </div>
+
             {/* Distribution modernisée */}
             {credits && credits.cast && credits.cast.length > 0 && (
               <div className="mt-16">
-                <h2 className="text-3xl font-bold text-white mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
                   {t.details.cast}
                 </h2>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                  {credits.cast.slice(0, 12).map((actor) => (
+                {/* Version desktop/tablette */}
+                <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+                  {credits.cast.slice(0, 16).map((actor) => (
                     <div key={actor.id} className="group">
-                      <div className="relative overflow-hidden rounded-xl bg-gray-800 shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
+                      <div className="relative overflow-hidden rounded-lg bg-gray-800 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1 h-full flex flex-col">
                         <div className="aspect-[3/4] overflow-hidden flex-shrink-0">
                           <img
                             src={
                               actor.profile_path
-                                ? `https://image.tmdb.org/t/p/w300${actor.profile_path}`
-                                : 'https://placehold.co/300x400@2x.png'
+                                ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                                : 'https://placehold.co/185x278@2x.png'
                             }
                             alt={actor.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                         
-                        <div className="p-4 bg-gradient-to-t from-gray-900 to-gray-800 flex-1 flex flex-col justify-between">
+                        <div className="p-2 md:p-3 bg-gradient-to-t from-gray-900 to-gray-800 flex-1 flex flex-col justify-between">
                           <div>
-                            <h3 className="font-bold text-white text-sm mb-1 line-clamp-2">
+                            <h3 className="font-bold text-white text-xs md:text-sm mb-1 line-clamp-2">
                               {actor.name}
                             </h3>
                             <p className="text-xs text-gray-400 line-clamp-2">
@@ -395,10 +418,60 @@ export default function MediaDetailsPage() {
                         </div>
                         
                         {/* Overlay hover */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Version mobile avec dropdown */}
+                <div className="sm:hidden">
+                  <details className="group">
+                    <summary className="list-none cursor-pointer">
+                      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-200">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white font-medium">Voir la distribution</span>
+                          <svg 
+                            className="w-5 h-5 text-gray-400 transition-transform duration-200 group-open:rotate-180" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </summary>
+                    
+                    <div className="mt-4 grid grid-cols-3 gap-3">
+                      {credits.cast.slice(0, 12).map((actor) => (
+                        <div key={actor.id} className="group">
+                          <div className="relative overflow-hidden rounded-lg bg-gray-800 shadow-md h-full flex flex-col">
+                            <div className="aspect-[3/4] overflow-hidden flex-shrink-0">
+                              <img
+                                src={
+                                  actor.profile_path
+                                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                                    : 'https://placehold.co/185x278@2x.png'
+                                }
+                                alt={actor.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            
+                            <div className="p-2 bg-gradient-to-t from-gray-900 to-gray-800 flex-1">
+                              <h3 className="font-bold text-white text-xs mb-1 line-clamp-2">
+                                {actor.name}
+                              </h3>
+                              <p className="text-xs text-gray-400 line-clamp-2">
+                                {actor.character}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
                 </div>
               </div>
             )}

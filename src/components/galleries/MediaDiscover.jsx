@@ -25,8 +25,8 @@ export default function MediaDiscover() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,255,255,0.10),transparent_60%)]" />
             <div className="absolute inset-0 bg-blue-900/10 mix-blend-overlay pointer-events-none" />
 
-            <div className="relative mx-auto w-full sm:max-w-[1200px] flex flex-col pt-14 sm:pt-16 md:pt-20 px-4 sm:px-6 md:px-8 gap-8 sm:gap-10">
-                <header className="space-y-3 text-justify px-4 sm:text-left">
+            <div className="relative mx-auto w-full flex flex-col pt-14 sm:pt-16 md:pt-20 gap-4 sm:gap-6 md:gap-8 max-w-6xl px-8 sm:px-8 xl:px-8 ">
+                <header className="space-y-3 text-left">
                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)]">
                         {t.home.welcome}
                     </h1>
@@ -36,7 +36,7 @@ export default function MediaDiscover() {
                 </header>
                 <div className={`
                     transition-all duration-500 ease-in-out
-                    ${showingSuggestions ? 'pb-[455px]' : 'pb-16 md:pb-5'}
+                    ${showingSuggestions ? 'pb-[455px]' : 'pb-10'}
                 `}>
                     <HomeSearchBar variant="light" onSuggestionsChange={handleSuggestionsChange} />
                 </div>

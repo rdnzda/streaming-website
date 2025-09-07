@@ -98,9 +98,9 @@ export default function PopularSeries() {
       <NavBar />
       <main className="pt-[76px] w-full">
         <SearchBar onSearch={handleSearch} />
-        <div className="pt-[60px]">
+        <div className="pt-[70px] max-w-7/8 sm:max-w-2xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto w-full">
           <FilterBar onChange={setFilters} />
-          <div className="px-4 sm:px-8">
+          <div className="px-4">
             <MediaGallery
               items={series}
               pageLoading={pageLoading}

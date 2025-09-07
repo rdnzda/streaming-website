@@ -52,7 +52,7 @@ const FILTERS = [
 // Simple wrapper utilisant SimpleBar pour un scroll fluide sans boutons
 function SimpleBarCarousel({ trailers, onOpen }) {
   return (
-    <div className="w-full sm:max-w-[1200px] m-auto px-4 sm:px-8">
+    <div className="w-full max-w-6xl m-auto px-4 sm:px-8">
       <SimpleBar autoHide={false} className="w-full pb-4">
         <div className="flex gap-6 pr-6">
           {trailers.map(tr => (
@@ -209,12 +209,12 @@ export default function RecentTrailersGallery({ include = 'both' }) {
   }, [active]);
 
   return (
-    <section className="w-full m-auto flex flex-col gap-4 text-white pt-8 bg-gray-900">
+    <section className="w-full m-auto flex flex-col px-4 gap-4 text-white pt-8 bg-gray-900">
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
-      <div className="w-full sm:max-w-[1200px] m-auto px-4 sm:px-8">
+      <div className="w-full max-w-6xl m-auto px-4 sm:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
           <h2 className="text-2xl font-semibold tracking-tight">
             {t?.sections?.recentTrailers || 'Nouveaux Trailers'}
@@ -246,7 +246,7 @@ export default function RecentTrailersGallery({ include = 'both' }) {
         </div>
       </div>
       {loading && (
-        <div className="w-full sm:max-w-[1200px] m-auto px-4 sm:px-8 pb-4">
+        <div className="w-full max-w-6xl m-auto px-4 sm:px-8 pb-4">
           <div className="relative overflow-hidden">
             <div className="flex gap-6">
               {Array.from({ length: 3 }).map((_, i) => (

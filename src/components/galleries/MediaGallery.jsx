@@ -46,14 +46,14 @@ export default function MediaGallery({
   }
 
   return (
-    <div className="flex flex-col items-start gap-6 sm:gap-8 lg:gap-10 pb-10 w-full max-w-7xl mx-auto">
+    <div className="flex flex-col items-start gap-6 pb-10 w-full max-w-6xl mx-auto">
       {/* Titre */}
       {title && (
-        <h2 className="drop-shadow-md font-bold text-xl sm:text-2xl px-4 sm:px-0">{title}</h2>
+        <h2 className="drop-shadow-md font-bold text-xl sm:text-2xl">{title}</h2>
       )}
 
       {/* Grille de cartes responsive */}
-      <div className="movie-gallery grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8 xl:gap-10 items-center justify-center animate-[fadeIn_0.6s_ease] w-full px-4 sm:px-0">
+      <div className="movie-gallery grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-4 md:gap-6 lg:gap-6 xl:gap-8 items-between justify-between animate-[fadeIn_0.6s_ease] w-full">
         {uniqueItems.map((item, index) => (
           <MediaCard
             media={item}

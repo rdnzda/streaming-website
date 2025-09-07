@@ -126,8 +126,8 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
   };
 
   return (
-    <div className="w-full px-4 md:px-4 sm:px-0" ref={suggestionsRef}>
-      <form onSubmit={handleSubmit} className="w-fullmx-auto">
+    <div className="w-full" ref={suggestionsRef}>
+      <form onSubmit={handleSubmit} className="w-full mx-auto">
         <div className={`
           relative group
           ${isFocused ? 'transform scale-[1.02]' : 'transform scale-100'}

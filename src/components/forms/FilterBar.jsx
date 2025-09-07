@@ -79,23 +79,21 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
   };
 
   return (
-    <div className="w-full flex justify-center mt-16 sm:mt-16 lg:mt-40 px-4">
-      <div className="w-full max-w-[1160px]">
+    <div className="w-full max-w-6xl flex justify-center px-4 pb-2 mx-auto">
+      <div className="w-full">
         {/* Header avec toggle */}
-        <div className="mb-4">
+        <div className="mb-2 sm:mb-4">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="group flex items-center gap-3 w-full sm:w-auto bg-gradient-to-r from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-xl px-6 py-4 hover:border-blue-500/50 transition-all duration-300 shadow-lg hover:shadow-blue-500/20"
+            className="group flex items-center gap-3 w-auto bg-gradient-to-r from-gray-900/90 to-gray-800/90 backdrop-blur-lg border border-gray-700/50 rounded-xl px-6 py-3 sm:py-4 hover:border-blue-500/50 transition-all duration-300 shadow-lg hover:shadow-blue-500/20"
           >
             <div className="flex items-center gap-2">
               <FaFilter className="text-blue-400" />
-              <span className="text-white font-medium">Filtres</span>
+              <span className="text-white font-medium text-base sm:text-lg">Filtres</span>
             </div>
-            
             {hasActiveFilters && (
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
             )}
-            
             <FaChevronDown 
               className={`text-gray-400 transition-transform duration-300 ${
                 isExpanded ? 'rotate-180' : ''
@@ -106,24 +104,26 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
 
         {/* Panel de filtres */}
         <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
-          isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
-          <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl border border-gray-700/30 rounded-2xl p-8 shadow-2xl">
-            {/* Effet de gradient animé */}
-            <div className="absolute inset-0 opacity-30 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 rounded-2xl animate-gradient-x"></div>
-            
+          isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+          style={{
+            // Pour mobile, maxHeight élevé pour permettre le scroll, sinon collapse
+            transitionProperty: 'max-height, opacity',
+          }}
+        >
+          <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl border border-gray-700/30 rounded-2xl p-3 sm:p-8 shadow-2xl max-h-[80vh] overflow-y-auto">
             <div className="relative z-10">
               {/* Header avec reset */}
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-8 gap-2 sm:gap-0">
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                   <FaFilter className="text-blue-400" />
-                  Personnaliser votre recherche
+                  <span className="hidden xs:inline">Personnaliser votre recherche</span>
+                  <span className="inline xs:hidden">Recherche</span>
                 </h3>
-                
                 {hasActiveFilters && (
                   <button
                     onClick={resetFilters}
-                    className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 hover:text-red-300 px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium"
+                    className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 hover:text-red-300 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium"
                   >
                     <FaTimes className="text-xs" />
                     Réinitialiser
@@ -132,10 +132,10 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
               </div>
 
               {/* Filtres principaux */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 {/* Tri */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <div className="space-y-2 sm:space-y-3">
+                  <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300">
                     <FaSort className="text-blue-400" />
                     {t.filters.sort}
                   </label>
@@ -143,7 +143,7 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full appearance-none bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 pr-10 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 cursor-pointer hover:bg-gray-700/80"
+                      className="w-full appearance-none bg-gray-800/80 border border-gray-600/50 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 pr-8 sm:pr-10 text-white text-xs sm:text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 cursor-pointer hover:bg-gray-700/80"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value} className="bg-gray-800">
@@ -151,13 +151,13 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
                         </option>
                       ))}
                     </select>
-                    <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <FaChevronDown className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 
                 {/* Année */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <div className="space-y-2 sm:space-y-3">
+                  <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300">
                     <FaCalendarAlt className="text-green-400" />
                     {t.filters.year}
                   </label>
@@ -166,13 +166,13 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
                     placeholder="2024"
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
-                    className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 hover:bg-gray-700/80 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                    className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white text-xs sm:text-base placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-200 hover:bg-gray-700/80 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   />
                 </div>
 
                 {/* Note minimale */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <div className="space-y-2 sm:space-y-3">
+                  <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300">
                     <FaStar className="text-yellow-400" />
                     {t.filters.minRating}
                   </label>
@@ -184,25 +184,25 @@ export default function FilterBar({ onChange, initial = {}, compact = false }) {
                     step="0.1"
                     value={minVote}
                     onChange={(e) => setMinVote(e.target.value)}
-                    className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all duration-200 hover:bg-gray-700/80 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                    className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-white text-xs sm:text-base placeholder-gray-400 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all duration-200 hover:bg-gray-700/80 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   />
                 </div>
               </div>
 
               {/* Genres */}
-              <div className="space-y-4">
-                <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <div className="space-y-3 sm:space-y-4">
+                <h4 className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                   Genres
                 </h4>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   {GENRES.map((g) => {
                     const active = genres.includes(g.id);
                     return (
                       <button
                         key={g.id}
                         onClick={() => toggleGenre(g.id)}
-                        className={`relative group px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                        className={`relative group px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
                           active
                             ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 border border-blue-400/50"
                             : "bg-gray-800/60 text-gray-300 border border-gray-600/50 hover:border-purple-500/50 hover:text-white hover:bg-gray-700/60"
