@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, User } from "lucide-react";
@@ -8,7 +8,7 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import { searchPeople } from "../../services/api";
 import { Footer, Loader, NavBar } from "../../components";
 
-export default function PeoplePage() {
+function PeoplePageContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
@@ -131,5 +131,13 @@ export default function PeoplePage() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+export default function PeoplePage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <PeoplePageContent />
+    </Suspense>
   );
 }
