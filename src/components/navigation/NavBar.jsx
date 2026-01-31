@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { FaBars, FaTimes, FaChevronDown, FaHome, FaFilm, FaTv, FaInfoCircle } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown, FaUsers } from "react-icons/fa";
 import { useLanguage } from "../../contexts/LanguageContext";
 import LanguageSwitch from "./LanguageSwitch";
 
@@ -42,7 +42,7 @@ export default function NavBar() {
 
         {/* Menu desktop */}
         <div className="hidden lg:flex items-center space-x-8">
-          <ul className="flex flex-row font-medium text-sm gap-8 items-center">
+          <ul className="flex flex-row font-medium text-sm gap-6 items-center list-none">
             {/* Menu Films */}
             <li className="relative group">
               <button className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors duration-200 py-2">
@@ -95,13 +95,26 @@ export default function NavBar() {
               </div>
             </li>
 
-            {/* Lien À Propos moderne */}
-            <Link 
-              className="text-gray-300 hover:text-white transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-gray-800/50" 
-              href="/about"
-            >
-              {t.navigation.about}
-            </Link>
+            {/* Lien Distribution (acteurs, réalisateurs) */}
+            <li>
+              <Link 
+                className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-gray-800/50" 
+                href="/people"
+              >
+                <FaUsers className="w-4 h-4 flex-shrink-0" />
+                <span>{t.navigation.distribution}</span>
+              </Link>
+            </li>
+
+            {/* Lien À Propos */}
+            <li>
+              <Link 
+                className="text-gray-300 hover:text-white transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-gray-800/50" 
+                href="/about"
+              >
+                {t.navigation.about}
+              </Link>
+            </li>
           </ul>
 
           {/* Sélecteur de langue avec design moderne */}
@@ -223,6 +236,16 @@ export default function NavBar() {
                     </div>
                   )}
                 </div>
+
+                {/* Distribution */}
+                <Link
+                  href="/people"
+                  onClick={closeMobileMenu}
+                  className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-200 p-3 rounded-lg hover:bg-gray-800/50"
+                >
+                  <FaUsers className="w-4 h-4 flex-shrink-0" />
+                  <span className="font-medium">{t.navigation.distribution}</span>
+                </Link>
 
                 {/* À Propos */}
                 <Link
