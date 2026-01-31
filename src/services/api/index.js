@@ -29,9 +29,19 @@ export {
 // Mixte
 export {
   searchAll,
+  searchAllWithPeople,
   getTrendingAll
 } from './mixed.js';
 
 // Trailers récents et reviews
 export { getRecentMovieTrailers, getMovieVideos, getMovieReviews } from './movies.js';
 export { getRecentSeriesTrailers, getSeriesVideos, getSeriesReviews } from './series.js';
+
+// Personnes (acteurs, réalisateurs)
+export {
+  getPersonDetails,
+  getPersonMovieCredits,
+  getPersonTvCredits,
+  getPersonCombinedCredits,
+  searchPeople
+} from './person.js';

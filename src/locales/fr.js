@@ -7,7 +7,8 @@ export const fr = {
     about: "À Propos",
     popular: "Populaires",
     topRated: "Top Notés",
-    topRatedFeminine: "Top Notées"
+    topRatedFeminine: "Top Notées",
+    distribution: "Distribution"
   },
 
   // Page d'accueil
@@ -126,7 +127,12 @@ export const fr = {
   // Search placeholders
   search: {
     placeholder: "Rechercher des films et séries...",
-    homePlaceholder: "Rechercher des films et séries..."
+    homePlaceholder: "Rechercher des films, séries, acteurs...",
+    person: "Personne",
+    film: "Film",
+    seriesLabel: "Série",
+    searchPeoplePlaceholder: "Rechercher un acteur, réalisateur...",
+    noResults: "Aucun résultat"
   },
 
   // Footer
@@ -147,6 +153,7 @@ export const fr = {
   details: {
     synopsis: "Synopsis",
     cast: "Distribution",
+    directors: "Réalisateurs",
     countries: "Pays de production",
     seasons: "saison(s)",
     votes: "votes",
@@ -154,7 +161,9 @@ export const fr = {
     noReviews: "Aucun avis disponible",
     readMore: "Lire plus",
     readLess: "Lire moins",
-    reviewBy: "Par"
+    reviewBy: "Par",
+    watchTrailer: "Regarder le trailer",
+    viewCast: "Voir la distribution"
   },
 
   // Système d'avis avancé
@@ -178,7 +187,19 @@ export const fr = {
       total: "avis au total",
       showing: "Affichage de",
       of: "sur"
-    }
+    },
+    noReviewsWithFilters: "Aucun avis avec les filtres sélectionnés"
+  },
+
+  // Page personne (acteur / réalisateur)
+  person: {
+    biography: "Biographie",
+    noBiography: "Aucune biographie disponible",
+    knownFor: "Connu pour",
+    movies: "Films",
+    series: "Séries",
+    asCharacter: "en tant que",
+    asJob: "en tant que"
   },
 
   // Page À propos

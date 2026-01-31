@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, ArrowRight, Film, Tv, Star, Calendar } from "lucide-react";
+import { Search, ArrowRight, Film, Tv, Star, Calendar, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "../../contexts/LanguageContext";
-import { searchAll } from "../../services/api";
+import { searchAllWithPeople } from "../../services/api";
 
 /**
  * Barre de recherche moderne pour la page d'accueil
@@ -40,9 +40,8 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
 
     setLoading(true);
     try {
-      const results = await searchAll(query);
-      // Prendre les 8 premiers résultats les plus populaires
-      const topResults = results.all.slice(0, 8);
+      const results = await searchAllWithPeople(query);
+      const topResults = results.all.slice(0, 10);
       setSuggestions(topResults);
       if (topResults.length > 0) {
         setShowSuggestions(true);
@@ -89,23 +88,25 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Rediriger vers une page de résultats ou garder le comportement actuel
-      console.log("Recherche:", searchQuery.trim());
+      router.push(`/people?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
   const handleSuggestionClick = (item) => {
     const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
     const id = item.id;
-    
-    // Fermer les suggestions
+
     setShowSuggestions(false);
     setSearchQuery("");
     setSuggestions([]);
     setIsFocused(false);
-    
-    // Rediriger vers la page de détails
-    router.push(`/${mediaType}/${id}`);
+
+    if (mediaType === 'person') {
+      router.push(`/person/${id}`);
+    } else {
+      const path = mediaType === 'tv' ? 'series' : mediaType;
+      router.push(`/${path}/${id}`);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -124,6 +125,8 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
   const getMediaType = (item) => {
     return item.media_type || (item.title ? 'movie' : 'tv');
   };
+
+  const isPerson = (item) => getMediaType(item) === 'person';
 
   return (
     <div className="w-full" ref={suggestionsRef}>
@@ -248,9 +251,21 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
                         border-b border-white/10 last:border-b-0
                       `}
                     >
-                      {/* Poster miniature */}
-                      <div className="flex-shrink-0 w-12 h-16 rounded-lg overflow-hidden bg-gray-700">
-                        {item.poster_path ? (
+                      {/* Miniature: poster ou photo */}
+                      <div className={`flex-shrink-0 overflow-hidden rounded-lg bg-gray-700 ${isPerson(item) ? 'w-12 h-12' : 'w-12 h-16'}`}>
+                        {isPerson(item) ? (
+                          item.profile_path ? (
+                            <img
+                              src={`https://image.tmdb.org/t/p/w92${item.profile_path}`}
+                              alt={getTitle(item)}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <User className="w-6 h-6 text-gray-400" />
+                            </div>
+                          )
+                        ) : item.poster_path ? (
                           <img
                             src={`https://image.tmdb.org/t/p/w92${item.poster_path}`}
                             alt={getTitle(item)}
@@ -274,30 +289,37 @@ export default function HomeSearchBar({ variant = 'contrast', onSuggestionsChang
                             {getTitle(item)}
                           </h3>
                           <span className={`
-                            text-xs px-2 py-0.5 rounded-full font-medium
-                            ${getMediaType(item) === 'movie' 
-                              ? 'bg-blue-500/20 text-blue-400' 
-                              : 'bg-purple-500/20 text-purple-400'
+                            text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0
+                            ${isPerson(item)
+                              ? 'bg-amber-500/20 text-amber-400'
+                              : getMediaType(item) === 'movie'
+                                ? 'bg-blue-500/20 text-blue-400'
+                                : 'bg-purple-500/20 text-purple-400'
                             }
                           `}>
-                            {getMediaType(item) === 'movie' ? 'Film' : 'Série'}
+                            {isPerson(item) ? t.search.person : getMediaType(item) === 'movie' ? t.search.film : t.search.seriesLabel}
                           </span>
                         </div>
-                        
-                        <div className="flex items-center gap-3 text-xs opacity-70">
-                          {getReleaseDate(item) && (
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              <span>{formatDate(getReleaseDate(item))}</span>
-                            </div>
-                          )}
-                          {item.vote_average > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Star className="w-3 h-3 text-yellow-400" />
-                              <span>{Math.round(item.vote_average * 10) / 10}</span>
-                            </div>
-                          )}
-                        </div>
+                        {isPerson(item) ? (
+                          item.known_for_department && (
+                            <p className="text-xs opacity-70 truncate">{item.known_for_department}</p>
+                          )
+                        ) : (
+                          <div className="flex items-center gap-3 text-xs opacity-70">
+                            {getReleaseDate(item) && (
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-3 h-3" />
+                                <span>{formatDate(getReleaseDate(item))}</span>
+                              </div>
+                            )}
+                            {item.vote_average > 0 && (
+                              <div className="flex items-center gap-1">
+                                <Star className="w-3 h-3 text-yellow-400" />
+                                <span>{Math.round(item.vote_average * 10) / 10}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </button>
                   ))}

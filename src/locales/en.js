@@ -7,7 +7,8 @@ export const en = {
     about: "About",
     popular: "Popular",
     topRated: "Top Rated",
-    topRatedFeminine: "Top Rated"
+    topRatedFeminine: "Top Rated",
+    distribution: "People"
   },
 
   // Home page
@@ -115,7 +116,12 @@ export const en = {
   // Search placeholders
   search: {
     placeholder: "Search for movies and TV shows...",
-    homePlaceholder: "Search for movies and TV shows..."
+    homePlaceholder: "Search for movies, series, actors...",
+    person: "Person",
+    film: "Movie",
+    seriesLabel: "TV Show",
+    searchPeoplePlaceholder: "Search for an actor, director...",
+    noResults: "No results"
   },
 
   // Footer
@@ -136,6 +142,7 @@ export const en = {
   details: {
     synopsis: "Synopsis",
     cast: "Cast",
+    directors: "Directors",
     countries: "Production countries",
     seasons: "season(s)",
     votes: "votes",
@@ -143,7 +150,9 @@ export const en = {
     noReviews: "No reviews available",
     readMore: "Read more",
     readLess: "Read less",
-    reviewBy: "By"
+    reviewBy: "By",
+    watchTrailer: "Watch trailer",
+    viewCast: "View cast"
   },
 
   // Advanced reviews system
@@ -167,7 +176,19 @@ export const en = {
       total: "reviews total",
       showing: "Showing",
       of: "of"
-    }
+    },
+    noReviewsWithFilters: "No reviews match the selected filters"
+  },
+
+  // Person page (actor / director)
+  person: {
+    biography: "Biography",
+    noBiography: "No biography available",
+    knownFor: "Known for",
+    movies: "Movies",
+    series: "TV Shows",
+    asCharacter: "as",
+    asJob: "as"
   },
 
   // About page

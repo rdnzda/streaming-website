@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { FaStar, FaArrowLeft, FaCalendarAlt, FaClock, FaGlobe, FaPlay, FaTimes, FaUser } from "react-icons/fa";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { getMovieDetails, getSeriesDetails, getMovieCredits, getSeriesCredits, getMovieVideos, getSeriesVideos, getMovieReviews, getSeriesReviews } from "../../../services/api";
@@ -208,6 +209,11 @@ export default function MediaDetailsPage() {
     ? `https://image.tmdb.org/t/p/original${media.backdrop_path}`
     : null;
 
+  // Préférer une vidéo de type "Trailer" pour l'affichage
+  const trailerVideo = videos?.length > 0
+    ? videos.find((v) => v.type === "Trailer" && v.site === "YouTube") || videos[0]
+    : null;
+
   return (
     <div className="min-h-screen">
       <NavBar />
@@ -217,10 +223,11 @@ export default function MediaDetailsPage() {
           <div className="relative h-[30vh] sm:h-[40vh] overflow-hidden">
             <img
               src={backdrop}
-              alt={title}
-              className="w-full h-full object-cover"
+              alt=""
+              className="w-full h-full object-cover object-center"
+              fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent" />
             
             {/* Bouton retour positionné sur l'image */}
             <div className="absolute top-4 left-4 z-20">
@@ -261,8 +268,9 @@ export default function MediaDetailsPage() {
                       ? `https://image.tmdb.org/t/p/w500${media.poster_path}`
                       : 'https://placehold.co/300x450@2x.png'
                   }
-                  alt={title}
-                  className="w-42 xs:w-42 sm:w-78 md:w-60 lg:w-72 h-auto rounded-lg shadow-2xl"
+                  alt=""
+                  className="w-36 sm:w-44 md:w-52 lg:w-64 h-auto rounded-lg shadow-2xl"
+                  fetchPriority="high"
                 />
               </div>
               {/* Informations */}
@@ -334,15 +342,16 @@ export default function MediaDetailsPage() {
                   )}
                 </div>
 
-                {/* Bouton Trailer mobile - à droite du poster */}
-              {videos && videos.length > 0 && (
+                {/* Bouton Trailer mobile */}
+              {trailerVideo && (
                 <div className="flex sm:hidden items-start pt-2">
                   <button
                     onClick={() => setShowTrailer(true)}
                     className="inline-flex items-center gap-1 bg-white text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs"
+                    aria-label={t.details.watchTrailer}
                   >
                     <FaPlay className="text-xs" />
-                    <span>Regarder le Trailer</span>
+                    <span>{t.details.watchTrailer}</span>
                   </button>
                 </div>
               )}
@@ -355,16 +364,16 @@ export default function MediaDetailsPage() {
                   </div>
                 )}
 
-                {/* Bouton Trailer moderne et simple */}
-                {videos && videos.length > 0 && (
+                {/* Bouton Trailer desktop */}
+                {trailerVideo && (
                   <div className="hidden sm:block">
                     <button
                       onClick={() => setShowTrailer(true)}
                       className="inline-flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-100 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-sm sm:text-base"
+                      aria-label={t.details.watchTrailer}
                     >
                       <FaPlay className="text-xs sm:text-sm" />
-                      <span className="hidden xs:inline">Regarder le Trailer</span>
-                      <span className="inline xs:hidden">Regarder le Trailer</span>
+                      <span>{t.details.watchTrailer}</span>
                     </button>
                   </div>
                 )}
@@ -382,99 +391,100 @@ export default function MediaDetailsPage() {
               )}
             </div>
 
-            {/* Distribution modernisée */}
-            {credits && credits.cast && credits.cast.length > 0 && (
-              <div className="mt-16">
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
-                  {t.details.cast}
-                </h2>
-                
-                {/* Version desktop/tablette */}
-                <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
-                  {credits.cast.slice(0, 16).map((actor) => (
-                    <div key={actor.id} className="group">
-                      <div className="relative overflow-hidden rounded-lg bg-gray-800 shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1 h-full flex flex-col">
-                        <div className="aspect-[3/4] overflow-hidden flex-shrink-0">
-                          <img
-                            src={
-                              actor.profile_path
-                                ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                                : 'https://placehold.co/185x278@2x.png'
-                            }
-                            alt={actor.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        
-                        <div className="p-2 md:p-3 bg-gradient-to-t from-gray-900 to-gray-800 flex-1 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-bold text-white text-xs md:text-sm mb-1 line-clamp-2">
-                              {actor.name}
-                            </h3>
-                            <p className="text-xs text-gray-400 line-clamp-2">
-                              {actor.character}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        {/* Overlay hover */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Section Distribution (réalisateurs + casting) */}
+            {credits && (credits.cast?.length > 0 || credits.crew?.length > 0) && (() => {
+              const directors = (credits.crew || []).filter((c) => c.job === "Director");
+              const directorsUnique = directors.filter((d, i, arr) => arr.findIndex((x) => x.id === d.id) === i);
+              const cast = credits.cast || [];
+              const CastCard = ({ person, sublabel, className = "" }) => (
+                <Link
+                  href={`/person/${person.id}`}
+                  className={`group rounded-xl overflow-hidden bg-gray-800 shadow-lg hover:shadow-xl hover:ring-2 hover:ring-blue-500/60 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col ${className}`}
+                >
+                  <div className="aspect-[3/4] overflow-hidden flex-shrink-0 relative">
+                    <img
+                      src={
+                        person.profile_path
+                          ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
+                          : "https://placehold.co/185x278@2x.png"
+                      }
+                      alt=""
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-80 pointer-events-none" />
+                  </div>
+                  <div className="p-3 sm:p-3.5 bg-gradient-to-t from-gray-900 to-gray-800 flex-1 flex flex-col justify-end relative -mt-12 pt-10">
+                    <h3 className="font-bold text-white text-sm mb-0.5 line-clamp-2">
+                      {person.name}
+                    </h3>
+                    {sublabel && (
+                      <p className="text-xs text-gray-400 line-clamp-2">{sublabel}</p>
+                    )}
+                  </div>
+                </Link>
+              );
 
-                {/* Version mobile avec dropdown */}
-                <div className="sm:hidden">
-                  <details className="group">
-                    <summary className="list-none cursor-pointer">
-                      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-200">
-                        <div className="flex items-center justify-between">
-                          <span className="text-white font-medium">Voir la distribution</span>
-                          <svg 
-                            className="w-5 h-5 text-gray-400 transition-transform duration-200 group-open:rotate-180" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
+              return (
+                <div className="mt-16 sm:mt-20">
+                  <div className="rounded-2xl border border-gray-700/60 bg-gray-800/30 backdrop-blur-sm p-6 sm:p-8">
+                    {/* Réalisateurs */}
+                    {directorsUnique.length > 0 && (
+                      <div className="mb-10">
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
+                          <span className="w-1 h-6 bg-blue-500 rounded-full" />
+                          {t.details.directors}
+                        </h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                          {directorsUnique.slice(0, 8).map((d) => (
+                            <CastCard key={d.id} person={d} sublabel={d.job} />
+                          ))}
                         </div>
                       </div>
-                    </summary>
-                    
-                    <div className="mt-4 grid grid-cols-3 gap-3">
-                      {credits.cast.slice(0, 12).map((actor) => (
-                        <div key={actor.id} className="group">
-                          <div className="relative overflow-hidden rounded-lg bg-gray-800 shadow-md h-full flex flex-col">
-                            <div className="aspect-[3/4] overflow-hidden flex-shrink-0">
-                              <img
-                                src={
-                                  actor.profile_path
-                                    ? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
-                                    : 'https://placehold.co/185x278@2x.png'
-                                }
-                                alt={actor.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            
-                            <div className="p-2 bg-gradient-to-t from-gray-900 to-gray-800 flex-1">
-                              <h3 className="font-bold text-white text-xs mb-1 line-clamp-2">
-                                {actor.name}
-                              </h3>
-                              <p className="text-xs text-gray-400 line-clamp-2">
-                                {actor.character}
-                              </p>
-                            </div>
-                          </div>
+                    )}
+
+                    {/* Distribution (casting) */}
+                    {cast.length > 0 && (
+                      <div>
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
+                          <span className="w-1 h-6 bg-blue-500 rounded-full" />
+                          {t.details.cast}
+                        </h3>
+                        <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                          {cast.slice(0, 18).map((actor) => (
+                            <CastCard key={actor.id} person={actor} sublabel={actor.character} />
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </details>
+
+                        {/* Mobile: accordéon distribution */}
+                        <div className="sm:hidden">
+                          <details className="group/details">
+                            <summary className="list-none cursor-pointer">
+                              <div className="rounded-xl p-4 border border-gray-600/50 bg-gray-800/50 hover:bg-gray-700/50 transition-colors flex items-center justify-between">
+                                <span className="text-white font-medium">{t.details.viewCast}</span>
+                                <svg
+                                  className="w-5 h-5 text-gray-400 transition-transform duration-200 group-open/details:rotate-180"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </div>
+                            </summary>
+                            <div className="mt-4 grid grid-cols-3 gap-3">
+                              {cast.slice(0, 12).map((actor) => (
+                                <CastCard key={actor.id} person={actor} sublabel={actor.character} className="shadow-md" />
+                              ))}
+                            </div>
+                          </details>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Section Avis */}
             {allReviews && allReviews.length > 0 && (
@@ -614,7 +624,7 @@ export default function MediaDetailsPage() {
 
                 {filteredReviews.length === 0 && allReviews.length > 0 && (
                   <div className="text-center py-8">
-                    <p className="text-gray-400">Aucun avis trouvé avec les filtres sélectionnés</p>
+                    <p className="text-gray-400">{t.reviewsSystem.noReviewsWithFilters}</p>
                   </div>
                 )}
               </div>
@@ -634,21 +644,28 @@ export default function MediaDetailsPage() {
         </div>
 
         {/* Modal Trailer */}
-        {showTrailer && videos && videos.length > 0 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="relative w-full max-w-4xl mx-4">
+        {showTrailer && trailerVideo && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.details.watchTrailer}
+            onClick={(e) => e.target === e.currentTarget && setShowTrailer(false)}
+          >
+            <div className="relative w-full max-w-4xl">
               <button
+                type="button"
                 onClick={() => setShowTrailer(false)}
-                className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                className="absolute -top-10 right-0 z-10 p-2 text-white hover:text-gray-300 transition-colors rounded-full hover:bg-white/10"
+                aria-label={t.actions.goBack}
               >
                 <FaTimes className="text-2xl" />
               </button>
-              
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <div className="relative w-full rounded-lg overflow-hidden shadow-2xl" style={{ paddingBottom: "56.25%" }}>
                 <iframe
-                  src={`https://www.youtube.com/embed/${videos[0].key}?autoplay=1`}
-                  title="Trailer"
-                  className="absolute inset-0 w-full h-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1`}
+                  title={t.details.watchTrailer}
+                  className="absolute inset-0 w-full h-full"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen

@@ -7,7 +7,8 @@ export const es = {
     about: "Acerca de",
     popular: "Populares",
     topRated: "Mejor Valoradas",
-    topRatedFeminine: "Mejor Valoradas"
+    topRatedFeminine: "Mejor Valoradas",
+    distribution: "Reparto"
   },
 
   // Home page
@@ -115,7 +116,12 @@ export const es = {
   // Search placeholders
   search: {
     placeholder: "Buscar películas y series...",
-    homePlaceholder: "Buscar películas y series..."
+    homePlaceholder: "Buscar películas, series, actores...",
+    person: "Persona",
+    film: "Película",
+    seriesLabel: "Serie",
+    searchPeoplePlaceholder: "Buscar un actor, director...",
+    noResults: "Sin resultados"
   },
 
   // Footer
@@ -136,6 +142,7 @@ export const es = {
   details: {
     synopsis: "Sinopsis",
     cast: "Reparto",
+    directors: "Directores",
     countries: "Países de producción",
     seasons: "temporada(s)",
     votes: "votos",
@@ -143,7 +150,9 @@ export const es = {
     noReviews: "No hay reseñas disponibles",
     readMore: "Leer más",
     readLess: "Leer menos",
-    reviewBy: "Por"
+    reviewBy: "Por",
+    watchTrailer: "Ver trailer",
+    viewCast: "Ver reparto"
   },
 
   // Advanced reviews system
@@ -167,7 +176,19 @@ export const es = {
       total: "reseñas en total",
       showing: "Mostrando",
       of: "de"
-    }
+    },
+    noReviewsWithFilters: "Ninguna reseña con los filtros seleccionados"
+  },
+
+  // Página persona (actor / director)
+  person: {
+    biography: "Biografía",
+    noBiography: "No hay biografía disponible",
+    knownFor: "Conocido por",
+    movies: "Películas",
+    series: "Series",
+    asCharacter: "como",
+    asJob: "como"
   },
 
   // About page
